@@ -5,31 +5,39 @@ from card import Card
 class Board:
     def __init__(self, size):
         self.size = size
-        self.cards = [Card(i) for i in range(size//2) for _ in range(2)]
+        self.cards = [Card(i) for i in range(size//2) for _ in range(2)] #פונקציה לבד
         random.shuffle(self.cards)
+        self.pairs_found = 0
 
+    def check_match(self,index1,index2):
+        if self.cards[index1].value == self.cards[index2].value:
+                print("Match found!")
+                self.pairs_found += 1
+        else:
+            print("No match. Try again.")
+            self.cards[index1].flip()
+            self.cards[index2].flip()
+        
+
+    def getIndex(self): #check valid index
+        index1 = int(input("Enter the index of the first card: "))
+        index2 = int(input("Enter the index of the second card: "))
+        return index1,index2
+    
     def play(self):
         turns = 0
-        pairs_found = 0
+        self.pairs_found = 0
 
-        while pairs_found < self.size // 2:
+        while self.pairs_found < self.size // 2:
             self.display_board()
             
-            index1 = int(input("Enter the index of the first card: "))
-            index2 = int(input("Enter the index of the second card: "))
+            index1, index2 = self.getIndex()
 
             self.cards[index1].flip()
             self.cards[index2].flip()
 
             self.display_board()
-
-            if self.cards[index1].value == self.cards[index2].value:
-                print("Match found!")
-                pairs_found += 1
-            else:
-                print("No match. Try again.")
-                self.cards[index1].flip()
-                self.cards[index2].flip()
+            self.check_match(index1,index2)
 
             turns += 1
 
